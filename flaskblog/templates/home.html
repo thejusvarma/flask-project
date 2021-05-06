@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Here are some activity</h1>
+    {% for posts in posts %}
+    <article class="media content-section">
+        <div class="media-body">
+          <div class="article-metadata">
+            <a class="mr-2" href="#">{{ posts.author }}</a>
+            <small class="text-muted">{{ posts.date_posted }}</small>
+          </div>
+          <h2><a class="article-title" href="#">{{ posts.title }}</a></h2>
+          <p class="article-content">{{ posts.content }}</p>
+        </div>
+      </article>
+    {% endfor %}
+{% endblock content %}
