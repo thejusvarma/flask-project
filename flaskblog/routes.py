@@ -1,30 +1,20 @@
+
 import secrets
+# library to set directory while storing files
 import os
+# library to resize image
+from PIL import Image
 from flask import Flask,render_template,url_for,flash,redirect, request
-from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flaskblog.forms import RegistrationForm, LoginForm, UpdateAccountForm, PostForm
 from flaskblog import app, db, bcrypt
 from flaskblog.models import User,Post
 from flask_login import login_user, current_user, logout_user, login_required
-posts=[
-    {
-        'author': 'Carl',
-        'title':'Rejoice',
-        'date_posted':'12-03-2021',
-        'content':'Use Bootstrap’s custom button styles for actions in forms, dialogs, and more with support for multiple sizes, states, and more'
-    },
-    {
-        
-        'author': 'Harry',
-        'title':'Markin',
-        'date_posted':'30-01-2021',
-        'content':'FLaskkkskskskadksskaaskdka'
-    }
-]
 
 # home route
 @app.route("/")
 @app.route("/home")
 def home():
+    posts = Post.query.all()
     return render_template('home.html',posts=posts,title='home')
  
 # about route
@@ -87,7 +77,12 @@ def save_picture(form_picture):
     f_name, f_ext = os.path.splitext(form_picture.filename)
     picture_fn = random_hex + f_ext
     picture_path = os.path.join(app.root_path,'static/profile_pics', picture_fn)
-    form_picture.save(picture_path)
+    
+    i= Image.open(form_picture)
+    
+    i.thumbnail([125,125],Image.ANTIALIAS)
+    i.save(picture_path)
+
     return picture_fn
 
 @app.route("/account",methods=['GET','POST'])
@@ -112,3 +107,17 @@ def account():
 
     image_file = url_for('static',filename='profile_pics/' + current_user.image_file)
     return render_template('account.html',title='Account',image_file=image_file, form=form)
+
+@app.route("/post/new",methods=['GET','POST'])
+@login_required
+def new_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        post = Post(title=form.title.data, content=form.content.data, author = current_user)
+        db.session.add(post)
+        db.session.commit()
+        flash('Posted!','success')
+        return redirect(url_for('home'))
+
+    return render_template('create_post.html', title='New Post',form = form)
+

@@ -3,10 +3,11 @@
     <h1>Here are some activity</h1>
     {% for posts in posts %}
     <article class="media content-section">
-        <div class="media-body">
+      <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/'+ posts.author.image_file) }}" alt="">  
+      <div class="media-body">
           <div class="article-metadata">
-            <a class="mr-2" href="#">{{ posts.author }}</a>
-            <small class="text-muted">{{ posts.date_posted }}</small>
+            <a class="mr-2" href="#">{{ posts.author.username }}</a>
+            <small class="text-muted">{{ posts.date_posted.strftime('%d-%m-%Y') }}</small>
           </div>
           <h2><a class="article-title" href="#">{{ posts.title }}</a></h2>
           <p class="article-content">{{ posts.content }}</p>

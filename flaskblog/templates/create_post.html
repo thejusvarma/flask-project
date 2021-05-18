@@ -1,0 +1,56 @@
+{% extends "layout.html" %}
+{% block content %}
+<div>
+    <!-- login form -->
+    <form method="POST" action="">
+        {{ form.hidden_tag() }}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Create Post</legend>
+
+            <!-- Title input -->
+            <div class="form-group">
+                {% if form.title.errors %}
+                    <!-- input field goes red becouse of error -->
+                    {{ form.title.label(class="form-group-label") }}
+                    {{ form.title(class="form-control is-invalid",placeholder="Title") }}
+                    <div class="invalid-feedback">
+                        <!-- displaying errors under the field -->
+                        {% for error in form.title.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <!-- correctly filled field -->
+                    {{ form.title.label(class="form-group-label") }}
+                    {{ form.title(class="form-control",placeholder="Title") }}
+                {% endif %}
+            </div>
+
+            <!--.content input -->
+            <div class="form-group">
+                {% if form.content.errors %}
+                    {{ form.content.label(class="form-group-label") }}
+                    {{ form.content(class="form-control is-invalid",placeholder="content") }}
+                    <div class="invalid-feedback">
+                        {% for error in form.content.errors %}
+                            <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    {{ form.content.label(class="form-group-label") }}
+                    {{ form.content(class="form-control",placeholder="content") }}
+                {% endif %}
+            </div>
+
+
+        </fieldset>
+
+        <!-- submit button -->
+        <div class="form-group">
+            {{ form.submit(class="btn btn-secondary")}}
+        </div>
+        
+
+    </form>
+</div>
+{% endblock content %}
